@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tesla WOW XXL</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+/* ====== CSS GLOBAL ====== */
+:root {
+    --primary:#1ebcfc;
+    --bg-dark:#111;
+    --bg-light:#f5f5f5;
+    --text-dark:#111;
+    --text-light:#fff;
+}
+body {
+    margin:0;
+    font-family:'Roboto',sans-serif;
+    scroll-behavior:smooth;
+    background-color:var(--bg-dark);
+    color:var(--text-light);
+    transition: background-color 0.5s, color 0.5s;
+}
+a { color: var(--primary); text-decoration:none; }
+header { height:100vh; position:relative; overflow:hidden; display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center;}
+header::after {
+    content:'';
+    background:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/1b6f2b47-3f49-4f10-b1a7-2d9d9ff34e6a/bvlatuR/std/2880x1800/Homepage-ModelS-Desktop-LHD') no-repeat center/cover;
+    position:absolute; top:0; left:0; right:0; bottom:0; opacity:0.5; z-index:-1; transform:translateZ(0);
+}
+header h1 {
+    font-size:4em; margin:0; animation:slideDown 2s ease;
+    text-shadow:0 0 20px #1ebcfc;
+}
+header p { font-size:1.5em; margin-top:20px; animation:slideUp 2s ease; text-shadow:0 0 10px #1ebcfc;}
+button { margin-top:30px; padding:15px 30px; font-size:1em; border:none; border-radius:5px; background:var(--primary); color:var(--bg-dark); cursor:pointer; transition:0.3s; box-shadow:0 0 20px var(--primary); }
+button:hover { transform:scale(1.05); box-shadow:0 0 40px var(--primary); }
+
+/* Animations */
+@keyframes slideDown { from {opacity:0; transform:translateY(-50px);} to{opacity:1; transform:translateY(0);} }
+@keyframes slideUp { from {opacity:0; transform:translateY(50px);} to{opacity:1; transform:translateY(0);} }
+.fade-in { opacity:0; transform:translateY(30px); transition:1s ease-out; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+
+/* ====== SOMMAIRE ====== */
+nav {
+    position:sticky; top:0; background:rgba(0,0,0,0.9); padding:10px 20px; z-index:1000; display:flex; justify-content:center; gap:20px;
+}
+nav a { color:var(--primary); font-weight:bold; transition:0.3s; }
+nav a:hover { color:#fff; }
+
+/* ====== SECTIONS ====== */
+section {
+    padding:100px 50px; max-width:1200px; margin:auto;
+    background-attachment:fixed; background-size:cover; background-position:center;
+}
+h2 { font-size:2.5em; margin-bottom:20px; text-align:center; text-shadow:0 0 10px #000; }
+p { font-size:1.2em; line-height:1.6em; text-align:justify; }
+
+/* ====== GALERIE ====== */
+.gallery { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+.gallery img { width:250px; height:150px; object-fit:cover; cursor:pointer; border-radius:10px; transition: transform 0.3s, box-shadow 0.3s; }
+.gallery img:hover { transform:scale(1.1); box-shadow:0 0 30px var(--primary); }
+
+/* ====== POPUP ====== */
+#popup { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.95); justify-content:center; align-items:center; z-index:2000; }
+#popup img { max-width:80%; max-height:80%; border-radius:10px; box-shadow:0 0 50px var(--primary); }
+#popup span { position:absolute; top:20px; right:40px; font-size:2em; cursor:pointer; color:#fff; }
+
+/* ====== GRAPHIQUES ====== */
+canvas { background-color:#222; border-radius:10px; margin-top:20px; }
+
+/* ====== CARTE ====== */
+#map { height:500px; border-radius:10px; margin-top:20px; }
+
+/* ====== FOOTER ====== */
+footer { background-color:#000; text-align:center; padding:50px 20px; font-size:0.9em; color:#888; }
+
+/* ====== DARK MODE TOGGLE ====== */
+#darkModeBtn { position:fixed; bottom:30px; right:30px; background:var(--primary); color:var(--bg-dark); border:none; padding:15px; border-radius:50%; cursor:pointer; box-shadow:0 0 20px var(--primary); transition:0.3s; z-index:1001; }
+#darkModeBtn:hover { transform:scale(1.1); box-shadow:0 0 40px var(--primary); }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+<h1>Tesla WOW XXL</h1>
+<p>L'univers complet de Tesla</p>
+<button onclick="document.getElementById('sommaire').scrollIntoView()">Explorer</button>
+</header>
+
+<!-- SOMMAIRE -->
+<nav id="sommaire">
+<a href="#histoire">Histoire</a>
+<a href="#chiffres">Chiffres</a>
+<a href="#modeles">Modèles</a>
+<a href="#innovations">Innovations</a>
+<a href="#usines">Usines</a>
+<a href="#elon">Elon Musk</a>
+<a href="#video">Vidéo</a>
+<a href="#sources">Sources</a>
+</nav>
+
+<!-- SECTIONS -->
+<section id="histoire" style="background-image:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/tesla-history-bg.jpg')">
+<h2 class="fade-in">Histoire de Tesla</h2>
+<p class="fade-in">Tesla Motors, fondée en 2003 par Martin Eberhard et Marc Tarpenning...</p>
+</section>
+
+<section id="chiffres" style="background-color:#111;">
+<h2 class="fade-in">Chiffres clés</h2>
+<canvas id="chartCA" width="800" height="400" class="fade-in"></canvas>
+<canvas id="chartProd" width="800" height="400" class="fade-in"></canvas>
+</section>
+
+<section id="modeles" style="background-image:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/models-bg.jpg')">
+<h2 class="fade-in">Modèles Tesla</h2>
+<div class="gallery">
+<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/ModelS" alt="Model S" onclick="openPopup(this.src)">
+<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/Model3" alt="Model 3" onclick="openPopup(this.src)">
+<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/ModelX" alt="Model X" onclick="openPopup(this.src)">
+<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/ModelY" alt="Model Y" onclick="openPopup(this.src)">
+</div>
+</section>
+
+<section id="innovations" style="background-color:#111;">
+<h2 class="fade-in">Innovations et technologies</h2>
+<p class="fade-in">Autopilot, Superchargeurs, Batteries haute performance, Moteur électrique...</p>
+</section>
+
+<section id="usines" style="background-image:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/gigafactory-bg.jpg')">
+<h2 class="fade-in">Usines et Gigafactory</h2>
+<div id="map" class="fade-in"></div>
+</section>
+
+<section id="elon" style="background-color:#111;">
+<h2 class="fade-in">Elon Musk</h2>
+<p class="fade-in">Elon Musk, PDG emblématique de Tesla et SpaceX...</p>
+</section>
+
+<section id="video" style="background-color:#000;">
+<h2 class="fade-in">Vidéo officielle Tesla</h2>
+<iframe width="100%" height="500" src="https://www.youtube.com/embed/3f0LrSPq2ZM" title="Tesla Video" frameborder="0" allowfullscreen class="fade-in"></iframe>
+</section>
+
+<!-- POPUP IMAGE -->
+<div id="popup" onclick="closePopup()">
+<span>&times;</span>
+<img src="">
+</div>
+
+<!-- FOOTER -->
+<footer id="sources">
+<p>Sources : Tesla.com, Wikipédia, Forbes, Statista</p>
+</footer>
+
+<!-- DARK MODE TOGGLE -->
+<button id="darkModeBtn" onclick="toggleDarkMode()">🌓</button>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+// ==== POPUP ====
+function openPopup(src){
+    const popup = document.getElementById('popup');
+    popup.style.display = 'flex';
+    popup.querySelector('img').src = src;
+}
+function closePopup(){
+    document.getElementById('popup').style.display = 'none';
+}
+
+// ==== GRAPHIQUES ANIMÉS ====
+const ctxCA = document.getElementById('chartCA').getContext('2d');
+new Chart(ctxCA, {
+    type: 'line',
+    data: {
+        labels: ['2016','2017','2018','2019','2020','2021','2022','2023'],
+        datasets: [{
+            label: 'Chiffre d\'Affaires (M$)',
+            data: [7,12,21,24,31,53,81,100],
+            borderColor:'#1ebcfc',
+            backgroundColor:'rgba(30,188,252,0.2)',
+            fill:true,
+            tension:0.3
+        }]
+    },
+    options: { responsive:true, animation:{duration:2000}, plugins:{ legend:{ labels:{color:'#fff'} } }, scales:{ x:{ ticks:{color:'#fff'} }, y:{ ticks:{color:'#fff'} } } }
+});
+
+const ctxProd = document.getElementById('chartProd').getContext('2d');
+new Chart(ctxProd, {
+    type: 'bar',
+    data: {
+        labels:['2016','2017','2018','2019','2020','2021','2022','2023'],
+        datasets:[{label:'Véhicules produits (k)', data:[76,103,245,367,499,936,1310,1500], backgroundColor:'#1ebcfc'}]
+    },
+    options:{ responsive:true, animation:{duration:2000}, plugins:{ legend:{ labels:{color:'#fff'} } }, scales:{ x:{ ticks:{color:'#fff'} }, y:{ ticks:{color:'#fff'} } } }
+});
+
+// ==== CARTE LEAFLET ====
+const map = L.map('map').setView([37.5, -122], 3);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+const factories=[
+    {name:'Fremont', coords:[37.5,-122.25], production:'500k véhicules/an'},
+    {name:'Shanghai', coords:[31.2,121.5], production:'450k véhicules/an'},
+    {name:'Berlin', coords:[52.5,13.4], production:'300k véhicules/an'},
+    {name:'Texas', coords:[30.4,-97.7], production:'400k véhicules/an'}
+];
+factories.forEach(f=>{
+    L.marker(f.coords).addTo(map).bindPopup(`<b>${f.name}</b><br>${f.production}`).on('mouseover',function(){this.openPopup();}).on('mouseout',function(){this.closePopup();});
+});
+
+// ==== FADE-IN AU SCROLL ====
+const faders = document.querySelectorAll('.fade-in');
+const appearOptions = {threshold:0.1, rootMargin:"0px 0px -50px 0px"};
+const appearOnScroll = new IntersectionObserver(function(entries,appearOnScroll){
+    entries.forEach(entry=>{
+        if(!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        appearOnScroll.unobserve(entry.target);
+    });
+}, appearOptions);
+faders.forEach(fader=>{appearOnScroll.observe(fader);});
+
+// ==== DARK MODE ====
+function toggleDarkMode(){
+    if(document.body.style.backgroundColor===var('--bg-light')){
+        document.body.style.backgroundColor = var('--bg-dark');
+        document.body.style.color = var('--text-light');
+    }else{
+        document.body.style.backgroundColor = var('--bg-light');
+        document.body.style.color = var('--text-dark');
+    }
+}
+</script>
+</body>
+</html>
