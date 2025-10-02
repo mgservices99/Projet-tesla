@@ -2,242 +2,183 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<title>Tesla</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tesla WOW XXL</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-/* ====== CSS GLOBAL ====== */
-:root {
-    --primary:#1ebcfc;
-    --bg-dark:#111;
-    --bg-light:#f5f5f5;
-    --text-dark:#111;
-    --text-light:#fff;
-}
-body {
-    margin:0;
-    font-family:'Roboto',sans-serif;
-    scroll-behavior:smooth;
-    background-color:var(--bg-dark);
-    color:var(--text-light);
-    transition: background-color 0.5s, color 0.5s;
-}
-a { color: var(--primary); text-decoration:none; }
-header { height:100vh; position:relative; overflow:hidden; display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center;}
-header::after {
-    content:'';
-    background:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/1b6f2b47-3f49-4f10-b1a7-2d9d9ff34e6a/bvlatuR/std/2880x1800/Homepage-ModelS-Desktop-LHD') no-repeat center/cover;
-    position:absolute; top:0; left:0; right:0; bottom:0; opacity:0.5; z-index:-1; transform:translateZ(0);
-}
-header h1 {
-    font-size:4em; margin:0; animation:slideDown 2s ease;
-    text-shadow:0 0 20px #1ebcfc;
-}
-header p { font-size:1.5em; margin-top:20px; animation:slideUp 2s ease; text-shadow:0 0 10px #1ebcfc;}
-button { margin-top:30px; padding:15px 30px; font-size:1em; border:none; border-radius:5px; background:var(--primary); color:var(--bg-dark); cursor:pointer; transition:0.3s; box-shadow:0 0 20px var(--primary); }
-button:hover { transform:scale(1.05); box-shadow:0 0 40px var(--primary); }
-
-/* Animations */
-@keyframes slideDown { from {opacity:0; transform:translateY(-50px);} to{opacity:1; transform:translateY(0);} }
-@keyframes slideUp { from {opacity:0; transform:translateY(50px);} to{opacity:1; transform:translateY(0);} }
-.fade-in { opacity:0; transform:translateY(30px); transition:1s ease-out; }
-.fade-in.visible { opacity:1; transform:translateY(0); }
-
-/* ====== SOMMAIRE ====== */
-nav {
-    position:sticky; top:0; background:rgba(0,0,0,0.9); padding:10px 20px; z-index:1000; display:flex; justify-content:center; gap:20px;
-}
-nav a { color:var(--primary); font-weight:bold; transition:0.3s; }
-nav a:hover { color:#fff; }
-
-/* ====== SECTIONS ====== */
-section {
-    padding:100px 50px; max-width:1200px; margin:auto;
-    background-attachment:fixed; background-size:cover; background-position:center;
-}
-h2 { font-size:2.5em; margin-bottom:20px; text-align:center; text-shadow:0 0 10px #000; }
-p { font-size:1.2em; line-height:1.6em; text-align:justify; }
-
-/* ====== GALERIE ====== */
-.gallery { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
-.gallery img { width:250px; height:150px; object-fit:cover; cursor:pointer; border-radius:10px; transition: transform 0.3s, box-shadow 0.3s; }
-.gallery img:hover { transform:scale(1.1); box-shadow:0 0 30px var(--primary); }
-
-/* ====== POPUP ====== */
-#popup { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.95); justify-content:center; align-items:center; z-index:2000; }
-#popup img { max-width:80%; max-height:80%; border-radius:10px; box-shadow:0 0 50px var(--primary); }
-#popup span { position:absolute; top:20px; right:40px; font-size:2em; cursor:pointer; color:#fff; }
-
-/* ====== GRAPHIQUES ====== */
-canvas { background-color:#222; border-radius:10px; margin-top:20px; }
-
-/* ====== CARTE ====== */
-#map { height:500px; border-radius:10px; margin-top:20px; }
-
-/* ====== FOOTER ====== */
-footer { background-color:#000; text-align:center; padding:50px 20px; font-size:0.9em; color:#888; }
-
-/* ====== DARK MODE TOGGLE ====== */
-#darkModeBtn { position:fixed; bottom:30px; right:30px; background:var(--primary); color:var(--bg-dark); border:none; padding:15px; border-radius:50%; cursor:pointer; box-shadow:0 0 20px var(--primary); transition:0.3s; z-index:1001; }
-#darkModeBtn:hover { transform:scale(1.1); box-shadow:0 0 40px var(--primary); }
-
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;overflow-x:hidden;}
+section{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;text-align:center;transition:all .8s;opacity:0;transform:translateY(50px);}
+section.active{opacity:1;transform:translateY(0);}
+nav{position:fixed;top:0;width:100%;background:#111;color:white;display:flex;justify-content:center;gap:10px;padding:10px;z-index:1000;}
+nav a{color:white;text-decoration:none;font-weight:bold;}
+button.cta{margin-top:15px;padding:10px 20px;background:#e82127;border:none;color:white;border-radius:8px;cursor:pointer;font-size:16px;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:20px;}
+.card{cursor:pointer;background:white;border-radius:12px;overflow:hidden;transition:transform .3s;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
+.card:hover{transform:scale(1.05);}
+.card img{width:100%;height:200px;object-fit:cover;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);justify-content:center;align-items:center;z-index:10000;}
+.modal-content{background:white;padding:20px;border-radius:12px;max-width:700px;max-height:80vh;overflow:auto;animation:fadeIn 0.5s;}
+.close{float:right;cursor:pointer;font-size:24px;}
+table{border-collapse:collapse;margin-top:20px;width:80%;max-width:800px;}
+th,td{border:1px solid #333;padding:10px;}
+img.section-img{max-width:300px;margin:15px 0;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-<h1>Tesla WOW XXL</h1>
-<p>L'univers complet de Tesla</p>
-<button onclick="document.getElementById('sommaire').scrollIntoView()">Explorer</button>
-</header>
-
-<!-- SOMMAIRE -->
-<nav id="sommaire">
-<a href="#histoire">Histoire</a>
-<a href="#chiffres">Chiffres</a>
-<a href="#modeles">Modèles</a>
-<a href="#innovations">Innovations</a>
-<a href="#usines">Usines</a>
-<a href="#elon">Elon Musk</a>
-<a href="#video">Vidéo</a>
-<a href="#sources">Sources</a>
+<!-- Navigation -->
+<nav>
+<a href="#" onclick="goSlide(0)">Intro</a>
+<a href="#" onclick="goSlide(1)">Histoire</a>
+<a href="#" onclick="goSlide(2)">Organisation</a>
+<a href="#" onclick="goSlide(3)">Taille</a>
+<a href="#" onclick="goSlide(4)">Statut</a>
+<a href="#" onclick="goSlide(5)">Finalités</a>
+<a href="#" onclick="goSlide(6)">Secteur</a>
+<a href="#" onclick="goSlide(7)">Ressources</a>
+<a href="#" onclick="goSlide(8)">Champ géographique</a>
+<a href="#" onclick="goSlide(9)">Conclusion</a>
+<a href="#" onclick="goSlide(10)">Sources</a>
 </nav>
 
-<!-- SECTIONS -->
-<section id="histoire" style="background-image:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/tesla-history-bg.jpg')">
-<h2 class="fade-in">Histoire de Tesla</h2>
-<p class="fade-in">Tesla Motors, fondée en 2003 par Martin Eberhard et Marc Tarpenning...</p>
+<!-- Sections / Diapos -->
+<section id="intro" class="active" style="background:url('header.jpg') center/cover no-repeat;color:white;">
+<h1>Tesla, Inc.</h1>
+<img src="logo.jpg" alt="Logo Tesla" style="max-width:200px;margin-top:20px;">
+<h3>Membres : Alice Dupont, Bob Martin, Claire Petit</h3>
+<p>Classe : 2nde A | Année : 2025-2026</p>
+<button class="cta" onclick="nextSlide()">Commencer</button>
 </section>
 
-<section id="chiffres" style="background-color:#111;">
-<h2 class="fade-in">Chiffres clés</h2>
-<canvas id="chartCA" width="800" height="400" class="fade-in"></canvas>
-<canvas id="chartProd" width="800" height="400" class="fade-in"></canvas>
+<section id="histoire">
+<h2>Histoire de Tesla</h2>
+<img src="roadster.jpg" alt="Tesla Roadster" class="section-img">
+<p>Tesla a été fondée en 2003 par un groupe d’ingénieurs et entrepreneurs visionnaires, dont Elon Musk, Martin Eberhard et Marc Tarpenning. Leur objectif : créer des véhicules électriques rapides, fiables et durables.</p>
+<p>En 2008, Tesla lance le Roadster, le premier véhicule électrique capable de performances comparables aux voitures sportives à essence. Cette innovation attire l’attention mondiale et ouvre la voie à la démocratisation des véhicules électriques.</p>
+<p>En 2012, la Model S voit le jour, combinant autonomie, performance et design. La Model X, un SUV électrique, et la Model 3, plus accessible, suivent pour élargir la clientèle.</p>
 </section>
 
-<section id="modeles" style="background-image:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/models-bg.jpg')">
-<h2 class="fade-in">Modèles Tesla</h2>
-<div class="gallery">
-<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/ModelS" alt="Model S" onclick="openPopup(this.src)">
-<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/Model3" alt="Model 3" onclick="openPopup(this.src)">
-<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/ModelX" alt="Model X" onclick="openPopup(this.src)">
-<img src="https://tesla-cdn.thron.com/delivery/public/image/tesla/ModelY" alt="Model Y" onclick="openPopup(this.src)">
+<section id="organisation">
+<h2>Type d'organisation</h2>
+<img src="elon.jpg" alt="Elon Musk" class="section-img">
+<p>Tesla est une Société par Actions (SA) cotée au Nasdaq. Elle fonctionne avec un conseil d'administration et une direction stratégique pilotée par Elon Musk. L'entreprise combine innovation technologique et expansion internationale rapide, s'appuyant sur des équipes pluridisciplinaires.</p>
+</section>
+
+<section id="tailles">
+<h2>Taille</h2>
+<p>En 2025, Tesla emploie environ 100 000 personnes dans le monde, réparties entre ingénieurs, designers, chercheurs, équipes de production et services support. L’entreprise possède plusieurs sites de production aux États-Unis, en Europe et en Asie.</p>
+</section>
+
+<section id="statut">
+<h2>Statut juridique</h2>
+<table>
+<tr><th>Élément</th><th>Information</th></tr>
+<tr><td>Statut</td><td>Société par Actions (SA)</td></tr>
+<tr><td>Capital</td><td>70 milliards $</td></tr>
+<tr><td>Siège</td><td>Palo Alto, Californie, USA</td></tr>
+<tr><td>Cotée en bourse</td><td>Oui (NASDAQ: TSLA)</td></tr>
+</table>
+</section>
+
+<section id="finalites">
+<h2>Finalités</h2>
+<p><strong>Économique :</strong> produire et vendre des véhicules électriques et solutions énergétiques à grande échelle.</p>
+<p><strong>Sociale :</strong> accélérer la transition mondiale vers l’énergie durable et promouvoir des technologies respectueuses de l’environnement.</p>
+</section>
+
+<section id="secteur">
+<h2>Nature et secteur d'activité</h2>
+<p>Tesla opère principalement dans les secteurs suivants :</p>
+<ul>
+<li>Automobile électrique</li>
+<li>Énergie renouvelable (panneaux solaires, batteries domestiques et industrielles)</li>
+<li>Intelligence artificielle et conduite autonome</li>
+<li>Stockage et distribution d’énergie</li>
+</ul>
+</section>
+
+<section id="ressources">
+<h2>Ressources</h2>
+<p><strong>Financières :</strong> un capital important et des revenus en forte croissance (graphique ci-dessous).</p>
+<p><strong>Humaines :</strong> des équipes d’ingénieurs, designers, techniciens et chercheurs.</p>
+<p><strong>Technologiques :</strong> logiciels embarqués, IA, batteries avancées, usines automatisées.</p>
+
+<canvas id="chartRevenue" style="margin-top:20px;"></canvas>
+<canvas id="chartProduction" style="margin-top:20px;"></canvas>
+</section>
+
+<section id="champ">
+<h2>Champ d'action géographique</h2>
+<p>Tesla possède une présence mondiale avec des sites de production et des bureaux en Amérique du Nord, Europe et Asie. La carte interactive ci-dessous montre les principales Gigafactories :</p>
+<div id="map" style="height:400px;width:80%;margin:auto;"></div>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>Tesla est devenue un leader mondial de la mobilité électrique et de l’innovation énergétique, combinant vision, technologie et expansion internationale. L’entreprise montre que les véhicules électriques peuvent être performants, désirables et accessibles à grande échelle.</p>
+</section>
+
+<section id="sources">
+<h2>Sources</h2>
+<ul>
+<li>Rapports Tesla 2023/2024</li>
+<li>Wikimedia Commons</li>
+<li>Tesla.com</li>
+<li>Articles spécialisés sur véhicules électriques</li>
+</ul>
+</section>
+
+<!-- Modal pour modèles -->
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<h3 id="modalTitle"></h3>
+<p id="modalText"></p>
 </div>
-</section>
-
-<section id="innovations" style="background-color:#111;">
-<h2 class="fade-in">Innovations et technologies</h2>
-<p class="fade-in">Autopilot, Superchargeurs, Batteries haute performance, Moteur électrique...</p>
-</section>
-
-<section id="usines" style="background-image:url('https://tesla-cdn.thron.com/delivery/public/image/tesla/gigafactory-bg.jpg')">
-<h2 class="fade-in">Usines et Gigafactory</h2>
-<div id="map" class="fade-in"></div>
-</section>
-
-<section id="elon" style="background-color:#111;">
-<h2 class="fade-in">Elon Musk</h2>
-<p class="fade-in">Elon Musk, PDG emblématique de Tesla et SpaceX...</p>
-</section>
-
-<section id="video" style="background-color:#000;">
-<h2 class="fade-in">Vidéo officielle Tesla</h2>
-<iframe width="100%" height="500" src="https://www.youtube.com/embed/3f0LrSPq2ZM" title="Tesla Video" frameborder="0" allowfullscreen class="fade-in"></iframe>
-</section>
-
-<!-- POPUP IMAGE -->
-<div id="popup" onclick="closePopup()">
-<span>&times;</span>
-<img src="">
 </div>
 
-<!-- FOOTER -->
-<footer id="sources">
-<p>Sources : Tesla.com, Wikipédia, Forbes, Statista</p>
-</footer>
+<!-- Boutons navigation -->
+<div style="position:fixed;bottom:20px;right:20px;z-index:1000;">
+<button class="cta" onclick="prevSlide()">Précédent</button>
+<button class="cta" onclick="nextSlide()">Suivant</button>
+</div>
 
-<!-- DARK MODE TOGGLE -->
-<button id="darkModeBtn" onclick="toggleDarkMode()">🌓</button>
-
-<!-- SCRIPTS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-// ==== POPUP ====
-function openPopup(src){
-    const popup = document.getElementById('popup');
-    popup.style.display = 'flex';
-    popup.querySelector('img').src = src;
+// Gestion slides
+let currentSlide = 0;
+const slides = document.querySelectorAll('section');
+function showSlide(index){
+slides.forEach((s,i)=>s.classList.remove('active'));
+slides[index].classList.add('active');
+currentSlide = index;
 }
-function closePopup(){
-    document.getElementById('popup').style.display = 'none';
+function nextSlide(){if(currentSlide<slides.length-1)showSlide(currentSlide+1);}
+function prevSlide(){if(currentSlide>0)showSlide(currentSlide-1);}
+function goSlide(index){showSlide(index);}
+
+// Modal pour modèles
+function openModel(name){
+document.getElementById('modal').style.display='flex';
+document.getElementById('modalTitle').innerText=name;
+document.getElementById('modalText').innerText="Détails techniques et informations sur "+name;
 }
+function closeModal(){document.getElementById('modal').style.display='none';}
 
-// ==== GRAPHIQUES ANIMÉS ====
-const ctxCA = document.getElementById('chartCA').getContext('2d');
-new Chart(ctxCA, {
-    type: 'line',
-    data: {
-        labels: ['2016','2017','2018','2019','2020','2021','2022','2023'],
-        datasets: [{
-            label: 'Chiffre d\'Affaires (M$)',
-            data: [7,12,21,24,31,53,81,100],
-            borderColor:'#1ebcfc',
-            backgroundColor:'rgba(30,188,252,0.2)',
-            fill:true,
-            tension:0.3
-        }]
-    },
-    options: { responsive:true, animation:{duration:2000}, plugins:{ legend:{ labels:{color:'#fff'} } }, scales:{ x:{ ticks:{color:'#fff'} }, y:{ ticks:{color:'#fff'} } } }
-});
+// Graphiques
+const ctxR = document.getElementById('chartRevenue').getContext('2d');
+new Chart(ctxR,{type:'line',data:{labels:["2018","2019","2020","2021","2022","2023"],datasets:[{label:"Chiffre d'affaires (Mds $)",data:[21,24,31,53,81,96],borderColor:"red",fill:false}]}});
 
-const ctxProd = document.getElementById('chartProd').getContext('2d');
-new Chart(ctxProd, {
-    type: 'bar',
-    data: {
-        labels:['2016','2017','2018','2019','2020','2021','2022','2023'],
-        datasets:[{label:'Véhicules produits (k)', data:[76,103,245,367,499,936,1310,1500], backgroundColor:'#1ebcfc'}]
-    },
-    options:{ responsive:true, animation:{duration:2000}, plugins:{ legend:{ labels:{color:'#fff'} } }, scales:{ x:{ ticks:{color:'#fff'} }, y:{ ticks:{color:'#fff'} } } }
-});
+const ctxP = document.getElementById('chartProduction').getContext('2d');
+new Chart(ctxP,{type:'bar',data:{labels:["2018","2019","2020","2021","2022","2023"],datasets:[{label:"Production (milliers véhicules)",data:[245,365,500,930,1313,1845],backgroundColor:"blue"}]}});
 
-// ==== CARTE LEAFLET ====
-const map = L.map('map').setView([37.5, -122], 3);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
-const factories=[
-    {name:'Fremont', coords:[37.5,-122.25], production:'500k véhicules/an'},
-    {name:'Shanghai', coords:[31.2,121.5], production:'450k véhicules/an'},
-    {name:'Berlin', coords:[52.5,13.4], production:'300k véhicules/an'},
-    {name:'Texas', coords:[30.4,-97.7], production:'400k véhicules/an'}
-];
-factories.forEach(f=>{
-    L.marker(f.coords).addTo(map).bindPopup(`<b>${f.name}</b><br>${f.production}`).on('mouseover',function(){this.openPopup();}).on('mouseout',function(){this.closePopup();});
-});
-
-// ==== FADE-IN AU SCROLL ====
-const faders = document.querySelectorAll('.fade-in');
-const appearOptions = {threshold:0.1, rootMargin:"0px 0px -50px 0px"};
-const appearOnScroll = new IntersectionObserver(function(entries,appearOnScroll){
-    entries.forEach(entry=>{
-        if(!entry.isIntersecting) return;
-        entry.target.classList.add('visible');
-        appearOnScroll.unobserve(entry.target);
-    });
-}, appearOptions);
-faders.forEach(fader=>{appearOnScroll.observe(fader);});
-
-// ==== DARK MODE ====
-function toggleDarkMode(){
-    if(document.body.style.backgroundColor===var('--bg-light')){
-        document.body.style.backgroundColor = var('--bg-dark');
-        document.body.style.color = var('--text-light');
-    }else{
-        document.body.style.backgroundColor = var('--bg-light');
-        document.body.style.color = var('--text-dark');
-    }
-}
+// Carte Leaflet
+const map = L.map('map').setView([20,0],2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
+const usines=[["Fremont",37.5,-121.9],["Giga Nevada",39.5,-119.8],["Giga Texas",30.2,-97.6],["Giga Shanghai",31.2,121.5],["Giga Berlin",52.3,13.4]];
+usines.forEach(u=>L.marker([u[1],u[2]]).addTo(map).bindPopup(u[0]));
 </script>
 </body>
 </html>
