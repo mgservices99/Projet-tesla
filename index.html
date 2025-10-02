@@ -4,73 +4,66 @@
 <meta charset="UTF-8">
 <title>Tesla</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;overflow-x:hidden;}
-section{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;text-align:center;transition:all .8s;opacity:0;transform:translateY(50px);}
-section.active{opacity:1;transform:translateY(0);}
-nav{position:fixed;top:0;width:100%;background:#111;color:white;display:flex;justify-content:center;gap:10px;padding:10px;z-index:1000;flex-wrap:wrap;}
+body,html{margin:0;padding:0;font-family:'Arial',sans-serif;scroll-behavior:smooth;background:#111;color:#fff;}
+nav{position:fixed;top:0;width:100%;background:rgba(17,17,17,0.9);display:flex;justify-content:center;gap:10px;padding:10px;z-index:1000;flex-wrap:wrap;}
 nav a{color:white;text-decoration:none;font-weight:bold;font-size:14px;}
-button.cta{margin-top:15px;padding:10px 20px;background:#e82127;border:none;color:white;border-radius:8px;cursor:pointer;font-size:16px;}
-img.section-img{max-width:300px;margin:15px 0;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
-table{border-collapse:collapse;margin-top:20px;width:80%;max-width:800px;}
-th,td{border:1px solid #333;padding:10px;}
-ul{text-align:left;max-width:600px;}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);justify-content:center;align-items:center;z-index:10000;}
-.modal-content{background:white;padding:20px;border-radius:12px;max-width:700px;max-height:80vh;overflow:auto;animation:fadeIn 0.5s;}
-.close{float:right;cursor:pointer;font-size:24px;}
+section{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:50px;text-align:center;overflow:hidden;}
+section h1,h2,h3{margin:20px 0;}
+section p,section ul,section table{max-width:900px;margin:auto;font-size:18px;line-height:1.5;color:#eee;}
+img.parallax{width:300px;margin:15px 0;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.4);transition: transform 0.3s ease;}
+table{border-collapse:collapse;width:80%;margin-top:20px;}
+th,td{border:1px solid #fff;padding:10px;}
+ul{text-align:left;}
+button.cta{padding:10px 20px;background:#e82127;border:none;color:white;border-radius:8px;cursor:pointer;font-size:16px;margin-top:20px;}
+#map{height:400px;width:80%;margin:auto;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.3);}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:10000;}
+.modal-content{background:#222;padding:20px;border-radius:12px;max-width:700px;max-height:80vh;overflow:auto;color:white;position:relative;animation:fadeIn 0.5s;}
+.close{position:absolute;top:10px;right:15px;font-size:28px;cursor:pointer;color:#fff;}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body>
 
-<!-- Navigation -->
 <nav>
-<a href="#" onclick="goSlide(0)">Intro</a>
-<a href="#" onclick="goSlide(1)">Histoire</a>
-<a href="#" onclick="goSlide(2)">Organisation</a>
-<a href="#" onclick="goSlide(3)">Taille</a>
-<a href="#" onclick="goSlide(4)">Statut</a>
-<a href="#" onclick="goSlide(5)">Finalités</a>
-<a href="#" onclick="goSlide(6)">Secteur</a>
-<a href="#" onclick="goSlide(7)">Ressources</a>
-<a href="#" onclick="goSlide(8)">Champ géographique</a>
-<a href="#" onclick="goSlide(9)">Conclusion</a>
-<a href="#" onclick="goSlide(10)">Sources</a>
+<a href="#intro">Intro</a><a href="#histoire">Histoire</a><a href="#organisation">Organisation</a>
+<a href="#tailles">Taille</a><a href="#statut">Statut</a><a href="#finalites">Finalités</a>
+<a href="#secteur">Secteur</a><a href="#ressources">Ressources</a><a href="#champ">Champ géographique</a>
+<a href="#conclusion">Conclusion</a><a href="#sources">Sources</a>
 </nav>
 
 <!-- Sections -->
-<section id="intro" class="active" style="background-color:#111;color:white;">
+<section id="intro" style="background:#111;">
 <h1>Tesla, Inc.</h1>
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Tesla_logo.png" alt="Logo Tesla" class="section-img">
-<h3>Membres : Mohammed , Dragos , Kely , Noah</h3>
-<p>Classe : 1ere STMG  | Année : 2025-2026</p>
-<button class="cta" onclick="nextSlide()">Commencer</button>
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Tesla_logo.png" class="parallax" alt="Logo Tesla">
+<h3>Membres : Mohammed , Dragos , Kely , Noah </h3>
+<p>Classe : 1ere STMG | Année : 2025-2026</p>
 </section>
 
-<section id="histoire">
+<section id="histoire" style="background:#1a1a1a;">
 <h2>Histoire de Tesla</h2>
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Tesla_Roadster_2.5.jpg" alt="Tesla Roadster" class="section-img">
-<p>Tesla, fondée en 2003 par Martin Eberhard et Marc Tarpenning, a pour objectif de révolutionner l'industrie automobile en produisant des véhicules électriques performants. Le nom rend hommage à Nikola Tesla. Elon Musk rejoint l'entreprise en 2004, apportant un investissement et une vision stratégique majeure.</p>
-<p>En 2008, le Roadster voit le jour, premier véhicule électrique performant. En 2012, la Model S combine autonomie et design. La Model X et la Model 3 suivent pour élargir la clientèle et démocratiser les véhicules électriques.</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Tesla_Roadster_2.5.jpg" class="parallax modal-trigger" data-model="Roadster" alt="Tesla Roadster">
+<p>Tesla a été fondée en 2003 par Martin Eberhard et Marc Tarpenning avec l'objectif de révolutionner l'industrie automobile...</p>
+<p>Le Roadster, lancé en 2008, marque le début de l’ère des voitures électriques performantes...</p>
 </section>
 
-<section id="organisation">
+<section id="organisation" style="background:#222;">
 <h2>Type d'organisation</h2>
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Elon_Musk_Royal_Society.jpg" alt="Elon Musk" class="section-img">
-<p>Tesla est une Société par Actions (SA) cotée au Nasdaq. L'entreprise combine innovation technologique et expansion internationale rapide, avec des équipes pluridisciplinaires et une direction stratégique pilotée par Elon Musk.</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Elon_Musk_Royal_Society.jpg" class="parallax" alt="Elon Musk">
+<p>Tesla est une SA cotée en bourse, combinant innovation technologique et expansion internationale rapide...</p>
 </section>
 
-<section id="tailles">
+<section id="tailles" style="background:#1a1a1a;">
 <h2>Taille de l'entreprise</h2>
 <p>Chiffre d'affaires : 53,8 milliards $ (2022)</p>
 <p>Effectif : 140 000 employés</p>
 <p>Production : +1,5 million de véhicules en 2022</p>
 </section>
 
-<section id="statut">
+<section id="statut" style="background:#222;">
 <h2>Statut juridique</h2>
 <table>
 <tr><th>Élément</th><th>Information</th></tr>
@@ -81,89 +74,104 @@ ul{text-align:left;max-width:600px;}
 </table>
 </section>
 
-<section id="finalites">
+<section id="finalites" style="background:#1a1a1a;">
 <h2>Finalités</h2>
-<p><strong>Économique :</strong> Produire et vendre des véhicules électriques et solutions énergétiques.</p>
+<p><strong>Économique :</strong> Produire et vendre véhicules électriques et solutions énergétiques.</p>
 <p><strong>Sociale :</strong> Promouvoir la transition énergétique et réduire l'empreinte carbone.</p>
 </section>
 
-<section id="secteur">
+<section id="secteur" style="background:#222;">
 <h2>Secteur d'activité</h2>
 <ul>
 <li>Automobile électrique</li>
-<li>Énergie renouvelable (panneaux solaires, batteries)</li>
-<li>Intelligence artificielle et conduite autonome</li>
+<li>Énergie renouvelable</li>
+<li>Intelligence artificielle & conduite autonome</li>
 <li>Stockage et distribution d’énergie</li>
 </ul>
 </section>
 
-<section id="ressources">
+<section id="ressources" style="background:#1a1a1a;">
 <h2>Ressources</h2>
 <p><strong>Humaines :</strong> Ingénieurs, designers, techniciens, chercheurs.</p>
 <p><strong>Financières :</strong> Capital important et revenus croissants.</p>
 <p><strong>Technologiques :</strong> Logiciels embarqués, IA, batteries avancées.</p>
-<canvas id="chartRevenue" style="margin-top:20px;"></canvas>
-<canvas id="chartProduction" style="margin-top:20px;"></canvas>
+<canvas id="chartRevenue" style="margin-top:20px;max-width:80%;"></canvas>
+<canvas id="chartProduction" style="margin-top:20px;max-width:80%;"></canvas>
 </section>
 
-<section id="champ">
+<section id="champ" style="background:#222;">
 <h2>Champ géographique</h2>
-<p>Sites de production et bureaux en Amérique, Europe et Asie.</p>
-<div id="map" style="height:400px;width:80%;margin:auto;"></div>
+<p>Présence mondiale avec sites de production et bureaux en Amérique, Europe et Asie.</p>
+<div id="map"></div>
 </section>
 
-<section id="conclusion">
+<section id="conclusion" style="background:#1a1a1a;">
 <h2>Conclusion</h2>
-<p>Tesla est un leader mondial de la mobilité électrique et de l’innovation énergétique, combinant vision, technologie et expansion internationale.</p>
+<p>Tesla est un leader mondial de la mobilité électrique et de l’innovation énergétique...</p>
 </section>
 
-<section id="sources">
+<section id="sources" style="background:#222;">
 <h2>Sources</h2>
 <ul>
-<li><a href="https://fr.wikipedia.org/wiki/Tesla_(automobile)">Wikipedia - Tesla</a></li>
-<li><a href="https://www.tesla.com/">Tesla.com</a></li>
+<li><a href="https://fr.wikipedia.org/wiki/Tesla_(automobile)" target="_blank">Wikipedia - Tesla</a></li>
+<li><a href="https://www.tesla.com/" target="_blank">Tesla.com</a></li>
 <li>Articles spécialisés sur véhicules électriques</li>
 </ul>
 </section>
 
-<!-- Navigation boutons -->
-<div style="position:fixed;bottom:20px;right:20px;z-index:1000;">
-<button class="cta" onclick="prevSlide()">Précédent</button>
-<button class="cta" onclick="nextSlide()">Suivant</button>
+<!-- Modal -->
+<div class="modal" id="modal">
+<div class="modal-content" id="modalContent">
+<span class="close" onclick="closeModal()">&times;</span>
+<h2 id="modelTitle"></h2>
+<img id="modelImg" style="max-width:100%;margin:15px 0;">
+<p id="modelDesc"></p>
+</div>
 </div>
 
 <script>
-// Slides
-let currentSlide=0;
-const slides=document.querySelectorAll('section');
-function showSlide(index){
-slides.forEach(s=>s.classList.remove('active'));
-slides[index].classList.add('active');
-currentSlide=index;
-}
-function nextSlide(){if(currentSlide<slides.length-1)showSlide(currentSlide+1);}
-function prevSlide(){if(currentSlide>0)showSlide(currentSlide-1);}
-function goSlide(index){showSlide(index);}
+// Parallax scroll
+window.addEventListener('scroll',()=>{document.querySelectorAll('.parallax').forEach(img=>{
+let offset=window.pageYOffset;
+img.style.transform=`translateY(${offset*0.2}px)`;});});
 
-// Graphiques Chart.js
+// Reveal sections
+function revealSections(){document.querySelectorAll('section').forEach(s=>{if(s.getBoundingClientRect().top<window.innerHeight-100){s.classList.add('active');}});}
+window.addEventListener('scroll',revealSections);
+window.addEventListener('load',revealSections);
+
+// Graphiques
 new Chart(document.getElementById('chartRevenue').getContext('2d'),{
 type:'line',
-data:{labels:["2018","2019","2020","2021","2022","2023"],
-datasets:[{label:"Chiffre d'affaires (Mds $)",data:[21,24,31,53,81,96],borderColor:"red",fill:false}]},
+data:{labels:["2018","2019","2020","2021","2022","2023"],datasets:[{label:"Chiffre d'affaires (Mds $)",data:[21,24,31,53,81,96],borderColor:"red",fill:false}]},
 options:{responsive:true}
 });
 new Chart(document.getElementById('chartProduction').getContext('2d'),{
 type:'bar',
-data:{labels:["2018","2019","2020","2021","2022","2023"],
-datasets:[{label:"Production (milliers)",data:[245,365,500,930,1313,1845],backgroundColor:"blue"}]},
+data:{labels:["2018","2019","2020","2021","2022","2023"],datasets:[{label:"Production (milliers)",data:[245,365,500,930,1313,1845],backgroundColor:"blue"}]},
 options:{responsive:true}
 });
 
 // Carte Leaflet
-const map = L.map('map').setView([20,0],2);
+const map=L.map('map').setView([20,0],2);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
 const usines=[["Fremont",37.5,-121.9],["Giga Nevada",39.5,-119.8],["Giga Texas",30.2,-97.6],["Giga Shanghai",31.2,121.5],["Giga Berlin",52.3,13.4]];
 usines.forEach(u=>L.marker([u[1],u[2]]).addTo(map).bindPopup(u[0]));
+
+// Modal interactif
+const modal=document.getElementById('modal');
+const modelTitle=document.getElementById('modelTitle');
+const modelImg=document.getElementById('modelImg');
+const modelDesc=document.getElementById('modelDesc');
+document.querySelectorAll('.modal-trigger').forEach(img=>{
+img.addEventListener('click',()=>{
+modal.style.display='flex';
+modelTitle='Tesla Roadster';
+modelImg.src=img.src;
+modelDesc.innerText='Le Roadster est le premier véhicule électrique de Tesla lancé en 2008, combinant performance et autonomie.';
+});});
+function closeModal(){modal.style.display='none';}
+window.onclick=function(e){if(e.target==modal)closeModal();}
 </script>
 
 </body>
